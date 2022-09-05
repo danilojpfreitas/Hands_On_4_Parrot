@@ -17,13 +17,13 @@ export const UserModel = db.define("user", {
     allowNull: false,
   },
   apartment:{
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   password:{
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
-  }
+  },
 }, {
   tableName: "user"
 });

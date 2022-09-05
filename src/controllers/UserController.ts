@@ -1,18 +1,40 @@
 import { Request, Response } from "express";
-import { UserModel } from "../database/models/UserModel"
+import { UserModel } from "../database/models";
 import bcrypt from "bcrypt";
 
 class UserController {
-  async findAll(req: Request, res: Response) {}
-  async findOne(req: Request, res: Response) {}
+
+  async find(req: Request, res: Response) {
+    try {
+      const user = await UserModel.findAll({
+        attributes: ['id', 'name', 'email', 'apartment']
+      });
+
+      return res.json(user)
+    } catch (error) {
+      return res.status(404);
+    }
+  }
+
+  async findOne(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const userID = await UserModel.findByPk(id);
+
+      res.status(200).json(userID)
+    } catch (error) {
+      return res.status(404);
+    }
+  }
 
   async create(req: Request, res: Response) {
    try {
-    let { name, email, apartment, password } = req.body;
+    const { name, email, apartment, password } = req.body;
 
-    let newPassword = bcrypt.hashSync(password, 10);
+    const newPassword = bcrypt.hashSync(password, 10);
 
-    let user = await UserModel.create({
+    const user = await UserModel.create({
       name,
       email,
       apartment,
@@ -25,8 +47,53 @@ class UserController {
     } 
   }
 
-  async update(req: Request, res: Response) {}
-  async destroy(req: Request, res: Response) {}
+  async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { name, email, apartment, password } = req.body;
+
+      const newPassword = bcrypt.hashSync(password, 10);
+
+      const user = await UserModel.update({
+        name,
+        email,
+        apartment,
+        password: newPassword,
+      }, {
+        where: {
+          id: id,
+        }
+      });
+
+      const userUpdate = await UserModel.findByPk(id)
+
+      res.json(userUpdate);
+    } catch (error) {
+      return res.status(404);
+    }
+  }
+
+  async destroy(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const userDestroy = await UserModel.findOne({ where: { id }});
+
+      if (!userDestroy) {
+        return res.status(404).json("Id not found")
+      } else {
+        await UserModel.destroy({
+          where: {
+              id: id,
+          }
+        })
+
+      res.status(204).json(`${id} deleted`);
+      }
+    } catch (error) {
+      return res.status(400);
+    }
+  }
 }
 
 export default new UserController();
