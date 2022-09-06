@@ -28,7 +28,7 @@ class UserController {
     }
   }
 
-  async create(req: Request, res: Response) {
+  async cadastro(req: Request, res: Response) {
    try {
     const { name, email, apartment, password } = req.body;
 

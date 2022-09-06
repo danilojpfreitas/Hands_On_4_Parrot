@@ -7,6 +7,7 @@ export const UserModel = db.define("user", {
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
+    unique: true
   },
   name:{
     type: DataTypes.STRING,
@@ -15,6 +16,7 @@ export const UserModel = db.define("user", {
   email:{
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true
   },
   apartment:{
     type: DataTypes.STRING,
@@ -23,7 +25,7 @@ export const UserModel = db.define("user", {
   password:{
     type: DataTypes.STRING,
     allowNull: false,
-  },
+  }
 }, {
   tableName: "user"
 });

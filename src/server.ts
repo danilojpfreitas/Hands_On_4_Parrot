@@ -7,7 +7,7 @@ const app = express();
 app.use(json());
 app.use(router);
 
-app.listen(3001, async () => {
+app.listen(3002, async () => {
   await db.sync();
-  console.log(`App running on 3001!`)
+  console.log(`App running on 3002!`)
 })
